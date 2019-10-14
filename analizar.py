@@ -16,6 +16,7 @@ current_path = ""
 
 def start_gui():
     root.title('Analizar reporte Vialservi')
+    root.iconbitmap('favicon.ico')
     root.geometry("300x80")
     root.resizable(0, 0)
     high_threshold_label = Label(root,  text="Límite máximo de desajuste")
