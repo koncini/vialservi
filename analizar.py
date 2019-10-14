@@ -4,26 +4,39 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
-from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+from openpyxl.utils.cell import coordinate_from_string
+from openpyxl.comments import Comment
+import os.path
 
-high_threshold = 30000
-mid_threshold = 10000
-dest = "C:/Users/rinco/Downloads/destination.xlsx"
+root = Tk()
+threshold_a = Spinbox(root, from_=0, to=100000)
+threshold_b = Spinbox(root, from_=0, to=100000)
+current_path = ""
 
 
 def start_gui():
-    root = Tk()
-    root.withdraw()
-    root.update()
+    root.title('Analizar reporte Vialservi')
+    root.geometry("300x80")
+    root.resizable(0, 0)
+    high_threshold_label = Label(root,  text="Límite máximo de desajuste")
+    mid_threshold_label = Label(root, text="Límite medio de desajuste")
+    analyze = Button(root, text="Analizar Reporte", command=get_file)
+    high_threshold_label.grid(row=0, sticky=W)
+    mid_threshold_label.grid(row=1, sticky=W)
+    threshold_a.grid(row=0, column=1, sticky=E)
+    threshold_b.grid(row=1, column=1, sticky=E)
+    analyze.grid(columnspan=2)
 
 
 def get_file():
-    work_book = None
+    global current_path
+    root.withdraw()
+    root.update()
     path_string = askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
-    print(path_string)
+    current_path = os.path.dirname(path_string)
     if path_string != "":
         work_book = load_workbook(path_string)
-    return work_book
+        analyze_file(work_book)
 
 
 def get_sheet(wb, index):
@@ -70,9 +83,10 @@ def paint_row(ws, cell_value, color_value):
             cell.fill = fill
 
 
-if __name__ == "__main__":
-    start_gui()
-    current_wb = get_file()
+def analyze_file(file):
+    high_threshold = int(threshold_a.get())
+    mid_threshold = int(threshold_b.get())
+    current_wb = file
     ag_sheet = get_sheet(current_wb, 0)
     cs_sheet = get_sheet(current_wb, 1)
     ag_record = get_vs_record(ag_sheet, 3, 10)
@@ -84,12 +98,16 @@ if __name__ == "__main__":
             match_diff = abs(ag_match_data[1]-cs_match_data[1])
             if match_diff >= high_threshold:
                 warning_record = ag_sheet[ag_match_data[0]]
+                comment = Comment(u'Presenta desajuste por: $'+ str(match_diff), u'Análisis')
+                warning_record.comment = comment
                 paint_row(ag_sheet, warning_record, "FF0000")
                 for warning_match in cs_match_data[0]:
                     warning_record = cs_sheet[warning_match]
                     paint_row(cs_sheet, warning_record, "FF0000")
             elif mid_threshold <= match_diff <= high_threshold:
                 warning_record = ag_sheet[ag_match_data[0]]
+                comment = Comment(u'Presenta desajuste por: $' + str(match_diff), u'Análisis')
+                warning_record.comment = comment
                 paint_row(ag_sheet, warning_record, "FFFF00")
                 for warning_match in cs_match_data[0]:
                     warning_record = cs_sheet[warning_match]
@@ -100,4 +118,10 @@ if __name__ == "__main__":
                 for warning_match in cs_match_data[0]:
                     warning_record = cs_sheet[warning_match]
                     paint_row(cs_sheet, warning_record, "00FF00")
-    current_wb.save(dest)
+    destination = os.path.join(current_path, 'Reporte Analizado.xlsx')
+    current_wb.save(destination)
+
+
+if __name__ == "__main__":
+    start_gui()
+    root.mainloop()
