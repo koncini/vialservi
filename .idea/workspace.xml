@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd2202c2-7f35-469d-8f32-e2b2791734ea" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analizar.py" beforeDir="false" afterPath="$PROJECT_DIR$/analizar.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -91,7 +90,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571091011834</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="ajustes finales">
+      <created>1571091471623</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1571091471623</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +116,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Logica de pintado" />
     <MESSAGE value="Interfaz gráfica" />
-    <option name="LAST_COMMIT_MESSAGE" value="Interfaz gráfica" />
+    <MESSAGE value="ajustes finales" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajustes finales" />
   </component>
 </project>
