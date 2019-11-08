@@ -35,7 +35,7 @@ def get_file():
     path_string = askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
     current_path = os.path.dirname(path_string)
     if path_string != "":
-        work_book = load_workbook(path_string)
+        work_book = load_workbook(path_string, data_only=True)
         analyze_file(work_book)
 
 
@@ -92,10 +92,12 @@ def analyze_file(file):
     ag_record = get_vs_record(ag_sheet, 3, 10)
     cs_record = get_sr_record(cs_sheet, 6, 15)
     for key in ag_record:
+
         if key in cs_record:
             cs_match_data = cs_record[key]
             ag_match_data = ag_record[key]
-            match_diff = abs(ag_match_data[1]-cs_match_data[1])
+            if ag_match_data[1] is not None and cs_match_data[1] is not None:
+                match_diff = abs(ag_match_data[1]-cs_match_data[1])
             if match_diff >= high_threshold:
                 warning_record = ag_sheet[ag_match_data[0]]
                 comment = Comment(u'Presenta desajuste por: $'+ str(match_diff), u'Análisis')
