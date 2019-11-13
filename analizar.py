@@ -2,6 +2,7 @@
 
 from tkinter import *
 from tkinter.filedialog import askopenfilename
+from tkinter import messagebox
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
 from openpyxl.utils.cell import coordinate_from_string
@@ -30,7 +31,6 @@ def start_gui():
 
 def get_file():
     global current_path
-    root.withdraw()
     root.update()
     path_string = askopenfilename(filetypes=[("Excel Files", "*.xlsx")])
     current_path = os.path.dirname(path_string)
@@ -122,6 +122,7 @@ def analyze_file(file):
                     paint_row(cs_sheet, warning_record, "00FF00")
     destination = os.path.join(current_path, 'Reporte Analizado.xlsx')
     current_wb.save(destination)
+    messagebox.showinfo(message="Se ha finalizado el análsis correctamente", title="Analizar Reporte")
 
 
 if __name__ == "__main__":
